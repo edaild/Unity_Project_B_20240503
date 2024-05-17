@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public GameObject[] CircleObject;            //°úÀÏ ÇÁ¸®ÆÕ ¿ÀºêÁ§Æ®
-    public Transform GenTransform;              //°úÀÏÀÌ »ı¼ºµÉ À§Ä¡ ¿ÀºêÁ§Æ®
-    public float TiemCheck;                     //½Ã°£À» Ã¼Å©ÇÏ±â À§ÇÑ (float) °ª
-    public bool isGen;                          // »ı¼º ¿Ï·á Ã¼Å© (bool) °ª
+    public GameObject[] CircleObject;            //ê³¼ì¼ í”„ë¦¬íŒ¹ ì˜¤ë¸Œì íŠ¸
+    public Transform GenTransform;              //ê³¼ì¼ì´ ìƒì„±ë  ìœ„ì¹˜ ì˜¤ë¸Œì íŠ¸
+    public float TiemCheck;                     //ì‹œê°„ì„ ì²´í¬í•˜ê¸° ìœ„í•œ (float) ê°’
+    public bool isGen;                          // ìƒì„± ì™„ë£Œ ì²´í¬ (bool) ê°’
     
     void Start()
     {
-        GenObject();                        //°ÔÀÓÀÌ ½ÃÀÛµÇ¾úÀ»¶§ ÇÔ¼ö¸¦ È£ÃâÇØ¼­ ÃÊ±âÈ­ ½ÃÅ²´Ù.
+        GenObject();                        //ê²Œì„ì´ ì‹œì‘ë˜ì—ˆì„ë•Œ í•¨ìˆ˜ë¥¼ í˜¸ì¶œí•´ì„œ ì´ˆê¸°í™” ì‹œí‚¨ë‹¤.
     }
 
    
@@ -19,29 +19,29 @@ public class GameManager : MonoBehaviour
     {
         if (!isGen)
         {
-            TiemCheck -= Time.deltaTime;        //¸Å ÇÁ·¹ÀÓ¸¶´Ù ÇÁ·¹ÀÓ ½Ã°£À» »©ÁØ´Ù.
+            TiemCheck -= Time.deltaTime;        //ë§¤ í”„ë ˆì„ë§ˆë‹¤ í”„ë ˆì„ ì‹œê°„ì„ ë¹¼ì¤€ë‹¤.
             if(TiemCheck <=0)
             {
-                int RandNumber = Random.Range(0, 3);                    //0 ~ 2±îÁö ÀÇ ·»ÅÒ ¼ıÀÚ¸¦ »ı¼º
-                GameObject Temp = Instantiate(CircleObject[0]);        //°úÀÏ ÇÁ¸®ÆÕ ¿ÀºêÁ§Æ®¸¦ »ı¼º ½ÃÄÑÁØ´Ù. (Instantiate)
-                Temp.transform.position = GenTransform.position;        //¼³Á¤ÇÑ À§Ä¡·Î ÀÌµ¿ ½ÃÅ²´Ù.
-                isGen = true;                                       //GenÀÌ µÇ¾ú´Ù°í true·Î bool °ªÀ» º¯°æÇÑ´Ù.
+                int RandNumber = Random.Range(0, 3);                    //0 ~ 2ê¹Œì§€ ì˜ ë Œí…€ ìˆ«ìë¥¼ ìƒì„±
+                GameObject Temp = Instantiate(CircleObject[RandNumber]);        //ê³¼ì¼ í”„ë¦¬íŒ¹ ì˜¤ë¸Œì íŠ¸ë¥¼ ìƒì„± ì‹œì¼œì¤€ë‹¤. (Instantiate)
+                Temp.transform.position = GenTransform.position;        //ì„¤ì •í•œ ìœ„ì¹˜ë¡œ ì´ë™ ì‹œí‚¨ë‹¤.
+                isGen = true;                                       //Genì´ ë˜ì—ˆë‹¤ê³  trueë¡œ bool ê°’ì„ ë³€ê²½í•œë‹¤.
             }
         } 
     }
 
     public void GenObject()
     {
-        isGen = false;           //ÃÊ±âÈ­ isGenÀ» false(»ı¼º µÇÁö ¾Ê¾Ò´Ù.)
-        TiemCheck = 1.0f;       // 1ÃÊÈÄ °úÀÏ ÇÁ¸®ÆÕÀ» »ı¼º ½ÃÅ°±â À§ÇÑ ÃÊ±âÈ­
+        isGen = false;           //ì´ˆê¸°í™” isGenì„ false(ìƒì„± ë˜ì§€ ì•Šì•˜ë‹¤.)
+        TiemCheck = 1.0f;       // 1ì´ˆí›„ ê³¼ì¼ í”„ë¦¬íŒ¹ì„ ìƒì„± ì‹œí‚¤ê¸° ìœ„í•œ ì´ˆê¸°í™”
         
     }
     
-    public void MergeObject(int index, Vector3 position)      //Merge ÇÔ¼ö´Â °úÀÏ¹øÈ£(int) °ú »ı¼º À§Ä¡°ª(Vector3)À» Àü´Ş ¹Ş´Â´Ù.
+    public void MergeObject(int index, Vector3 position)      //Merge í•¨ìˆ˜ëŠ” ê³¼ì¼ë²ˆí˜¸(int) ê³¼ ìƒì„± ìœ„ì¹˜ê°’(Vector3)ì„ ì „ë‹¬ ë°›ëŠ”ë‹¤.
     {
-        GameObject Temp = Instantiate(CircleObject[index]); //index¸¦ ±×´ë·Î ¾´´Ù. (0 ºÎÅÍ ¹è¿­ÀÌ ½ÃÀÛµÇÁö¸¸ index °ªÀÌ 1 ´õÀÖ¾î¼­)
-        Temp.transform.position = position;                 //À§Ä¡´Â Àü´Ş ¹ŞÀº °ªÀ¸·Î »ç¿ë
-        Temp.GetComponent<CircleObject>().Used();           // ¼±¾ğÇÑ Used ÇÔ¼ö »ç¿ë
+        GameObject Temp = Instantiate(CircleObject[index]); //indexë¥¼ ê·¸ëŒ€ë¡œ ì“´ë‹¤. (0 ë¶€í„° ë°°ì—´ì´ ì‹œì‘ë˜ì§€ë§Œ index ê°’ì´ 1 ë”ìˆì–´ì„œ)
+        Temp.transform.position = position;                 //ìœ„ì¹˜ëŠ” ì „ë‹¬ ë°›ì€ ê°’ìœ¼ë¡œ ì‚¬ìš©
+        Temp.GetComponent<CircleObject>().Used();           // ì„ ì–¸í•œ Used í•¨ìˆ˜ ì‚¬ìš©
 
     }
 }
