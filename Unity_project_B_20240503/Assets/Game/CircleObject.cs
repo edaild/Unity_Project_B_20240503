@@ -8,10 +8,19 @@ public class CircleObject : MonoBehaviour
     public bool isUsed;             //사용 완료 판단하는 (bool)
     Rigidbody2D rigidbody2D;      //강제로 2D로 불러온다
 
+    public int index;               //과일 번호를 만든다.
+
+     void Awake()                                       // 시작하기전 소스  단계에서 초기화
+    {
+        isUsed = false;                                 // 사용 완료가 되지 않음(처음사용)
+        rigidbody2D = GetComponent<Rigidbody2D>();        // 강제로 가져온다.
+        rigidbody2D.simulated = false;                  // 생성될때는 시뮬레이팅 되지 않는다.
+    }
+
     void Start()
     {
-        isUsed = false;                                 //사용 완료가 되지 않음 (처음 사용)
-        rigidbody2D = GetComponent<Rigidbody2D>();        // 강제로 가져온다.
+
+     
     }
 
 
@@ -54,6 +63,39 @@ public class CircleObject : MonoBehaviour
         if (Temp != null)                                           
         {
             Temp.gameObject.GetComponent<GameManager>().GenObject();
+        }
+    }
+
+    public void Used()
+    {
+        isDrag = false;                             //드래그가 종료
+        isUsed = true;                              //사용이 완료
+        rigidbody2D.simulated = true;               //물리 현상 시작
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)      //2D 충돌이 일어날 경우
+    {
+        if (index >= 7)                     //준비된 과일이 최대 7개
+            return;
+
+        if(collision.gameObject.tag == "Fruit") 
+        {
+            CircleObject temp = collision.gameObject.GetComponent<CircleObject>(); // 임시로 Class temp를 선언하고 충돌체의 Class(CircleObject)를 받아온다.
+
+            if(temp.index == index)
+            {
+                if(gameObject.GetInstanceID() > collision.gameObject.GetInstanceID())       //유니티에서 지원하는 고유의 ID가 큰쪽에서 다음 과일 생성
+                {
+                    //GameManger 에서 생성함수 호출
+                    GameObject Temp = GameObject.FindWithTag("GameManager");     //Tag : GameManger를 찾아서 오브젝트를 가져온다.
+                    if (Temp != null)
+                    {
+                        Temp.gameObject.GetComponent<GameManager>().MergeObject(index, gameObject.transform.position);          //생성된 MerageObject 함수에 인수와 함떼 전달
+                    }
+                    Destroy(temp.gameObject);                       //충돌 물체 파괴
+                    Destroy(gameObject);                            // 자기 자신 파괴
+                }
+            }
         }
     }
 }
