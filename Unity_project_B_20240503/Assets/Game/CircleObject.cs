@@ -4,22 +4,30 @@ using UnityEngine;
 
 public class CircleObject : MonoBehaviour
 {
-    public bool isDrag;             //드래크 중인지 판단하는 (bool)
-    public bool isUsed;             //사용 완료 판단하는 (bool)
-    Rigidbody2D rigidbody2D;      //강제로 2D로 불러온다
+    public bool isDrag;             // 드래그 중인지 판단하는 (bool)
+    public bool isUsed;             // 사용 완료 판단하는 (bool)
+    Rigidbody2D rigidbody2D;      // 강제로 2D로 불러온다
 
     public int index;               //과일 번호를 만든다.
 
+    public float EndTime = 0.0f;                //종류 선 시간 체크 변수(float)
+    public SpriteRenderer spriteRenderer;       
+
+    public GameManager gameManager;             // GamEManger 접근 선언
+   
      void Awake()                                       // 시작하기전 소스  단계에서 초기화
     {
         isUsed = false;                                 // 사용 완료가 되지 않음(처음사용)
         rigidbody2D = GetComponent<Rigidbody2D>();        // 강제로 가져온다.
         rigidbody2D.simulated = false;                  // 생성될때는 시뮬레이팅 되지 않는다.
+        spriteRenderer = GetComponent<SpriteRenderer>();        // 해당 오브젝트의 스프라이트 렌더러 접근
     }
+
+  
 
     void Start()
     {
-
+        gameManager = GameObject.FindWithTag("GameManager").GetComponent<GameManager>();     //게임 메니저를 얻어온다.
      
     }
 
@@ -71,6 +79,32 @@ public class CircleObject : MonoBehaviour
         isDrag = false;                             //드래그가 종료
         isUsed = true;                              //사용이 완료
         rigidbody2D.simulated = true;               //물리 현상 시작
+    }
+
+      public void OnTriggerStay2D(Collider2D collision)       //2D 충돌이 중일 때
+    {
+        if (collision.tag == "EndLine")
+        {
+            EndTime += Time.deltaTime;          // 프레임 시작만큼 누적 시켜서 초를 만든다.
+
+            if(EndTime > 1)
+            {
+                spriteRenderer.color = new Color(0.9f, 0.2f, 0.2f);
+            }
+            if(EndTime > 3)
+            {
+                gameManager.EndGame();
+            }
+        }
+    }
+
+    public void OnTriggerExit2D(Collider2D collision)
+    {
+        if(collision.tag == "EndLine")          //충돌 물체가 빠져 나갔을때
+        {
+            EndTime = 0.0f;
+            spriteRenderer.color = Color.white;      // 기존 색상으로 변경
+        }
     }
 
     private void OnCollisionEnter2D(Collision2D collision)      //2D 충돌이 일어날 경우
